@@ -10,7 +10,7 @@ module my_addr::utils {
 
     public fun u64_to_vec_u8(val : u64) : vector<u8> {
         let result = vector::empty<u8>();
-        
+
         while(val > 0) {
             let d  = val / 256;
             if (d > 0) {
@@ -22,9 +22,9 @@ module my_addr::utils {
             };
             val = val / 256;
         };
-        
+
         result
-    } 
+    }
 
     public fun u64_to_vec_u8_string(val : u64) : vector<u8> {
       let result = vector::empty<u8>();
@@ -32,16 +32,16 @@ module my_addr::utils {
       if (val == 0) {
          return b"0"
       };
-     
+
       while (val != 0) {
          vector::push_back(&mut result, ((48 + val % 10) as u8));
          val = val / 10;
       };
 
       vector::reverse(&mut result);
-      
+
       result
-   } 
+   }
 
    public fun ascii_u8_to_number(u : u8) : u8 {
         assert!((u >= 48 && u <=57)||(u >= 65 && u <= 70 ) || (u >= 97 && u <= 102), ERR_INVALID_ASCII_CHAR);
@@ -52,12 +52,12 @@ module my_addr::utils {
         };
 
         if (u >= 65 && u <= 70 ) {
-            byte = u - 65 + 10; 
+            byte = u - 65 + 10;
             return byte
         };
 
         if (u >= 97 && u <= 102) {
-            byte = u - 97 + 10; 
+            byte = u - 97 + 10;
             return byte
         };
 
@@ -80,7 +80,7 @@ module my_addr::utils {
 
             let l = *vector::borrow(vec, i);
             l = ascii_u8_to_number(l);
-            
+
             let u = h * 16 + l;
             // debug::print(&u);
             i = i + 1;
@@ -103,7 +103,12 @@ module my_addr::utils {
 
         let result = 0u64;
         let i = 0;
-        while(i < vector::length(&vec)) {
+        while({
+            spec {
+                invariant i <= len(vec);
+            };
+            i < vector::length(&vec)
+        }) {
             let h = *vector::borrow(&vec, i);
             result = result * 16 + (h as u64);
             i = i+1;

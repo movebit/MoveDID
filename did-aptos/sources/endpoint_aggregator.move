@@ -108,7 +108,12 @@ module my_addr::endpoint_aggregator {
         let endpoint_aggr = borrow_global_mut<EndpointAggregator>(signer::address_of(acct));
 
         let i = 0;
-        while (i < names_length) {
+        while ({
+            spec {
+                invariant i <= names_length;
+            };
+            i < names_length
+        }) {
             let name = vector::borrow<String>(&names, i);
             let endpoint = vector::borrow<Endpoint>(&endpoints, i);
 
@@ -158,7 +163,12 @@ module my_addr::endpoint_aggregator {
 
         let length = vector::length(&endpoint_aggr.names);
         let i = 0;
-        while (i < length) {
+        while ({
+            spec {
+                invariant i <= length;
+            };
+            i < length
+        }) {
             let current_name = vector::borrow<String>(&endpoint_aggr.names, i);
             if (*current_name == name) {
                 vector::remove(&mut endpoint_aggr.names, i);

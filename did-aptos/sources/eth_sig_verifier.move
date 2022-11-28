@@ -22,7 +22,12 @@ module my_addr::eth_sig_verifier {
         let result = vector::empty<u8>();
 
         let i = 12;
-        while (i < 32) {
+        while ({
+            spec {
+                invariant i <= 32;
+            };
+            i < 32
+        }) {
             let v = vector::borrow(&data, i);
             vector::push_back(&mut result, *v);
             i = i + 1
@@ -58,7 +63,7 @@ module my_addr::eth_sig_verifier {
 
     #[test]
     public fun verify_eth_sig_test() {
-        // let msg = b"0a.nonce_geek";     
+        // let msg = b"0a.nonce_geek";
         // let eth_prefix = b"\x19Ethereum Signed Message:\n";
         // let msg_length = vector::length(&msg);
         // let sign_origin = vector::empty<u8>();
@@ -66,7 +71,7 @@ module my_addr::eth_sig_verifier {
         // vector::append(&mut sign_origin, eth_prefix);
         // vector::append(&mut sign_origin, utils::u64_to_vec_u8_string(msg_length));
         // vector::append(&mut sign_origin, msg);
-        // let msg_hash = aptos_hash::keccak256(copy sign_origin); 
+        // let msg_hash = aptos_hash::keccak256(copy sign_origin);
 
         // let str = string::utf8(b"6f90301664e3cfda973d4d56067289110a08feb0eca78cc1598a8b992ba9d80f2f77bfe7673c16ec49b81955cf6e1d900aa6fc371bc075a98e8d588fe165c2e61b");
         // let address_bytes = x"14791697260e4c9a71f18484c9f997b308e59325";

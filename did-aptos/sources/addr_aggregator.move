@@ -145,7 +145,12 @@ module my_addr::addr_aggregator {
         let addr_aggr = borrow_global_mut<AddrAggregator>(signer::address_of(acct));
 
         let i = 0;
-        while (i < addrs_length) {
+        while ({
+            spec {
+                invariant i <= addrs_length;
+            };
+            i < addrs_length
+        }) {
             let name = vector::borrow<String>(&addrs, i);
             let addr_info = vector::borrow<AddrInfo>(&addr_infos, i);
 
@@ -248,7 +253,12 @@ module my_addr::addr_aggregator {
 
         let length = vector::length(&addr_aggr.addrs);
         let i = 0;
-        while (i < length) {
+        while ({
+            spec {
+                invariant i <= length;
+            };
+            i < length
+        }) {
             let current_addr = vector::borrow<String>(&addr_aggr.addrs, i);
             if (*current_addr == addr) {
                 vector::remove(&mut addr_aggr.addrs, i);

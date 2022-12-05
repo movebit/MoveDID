@@ -3,7 +3,7 @@ spec my_addr::addr_aggregator {
         pragma verify = true;
     }
 
-    /// AddrAggregatord does not under the signer befroe creating it.
+    /// AddrAggregatord shouldn't under the signer befroe creating it.
     /// Make sure the AddrAggregatord exists under the signer after creating it.
     spec create_addr_aggregator(acct: &signer, type: u64, description: String) {
         let addr = signer::address_of(acct);
@@ -15,10 +15,10 @@ spec my_addr::addr_aggregator {
         aborts_if !exists<AddrAggregator>(signer::address_of(acct));
     }
 
-    /// The addr is 0x begin.
-    /// The AddrAggregatord is under the signer.
+    /// The addr has 0x as it's prefix.
+    /// The AddrAggregatord should under the signer.
     /// Check addr_info is already exist under the addr.
-    /// Max id does not exceed MAX_U64.
+    /// Max id should not exceed MAX_U64.
     spec add_addr{
         include addr_info::CheckAddrPrefix;
         let account = signer::address_of(acct);
@@ -34,8 +34,8 @@ spec my_addr::addr_aggregator {
         table::spec_contains(addr_infos_map, addr)
     }
 
-    /// The number of 'addr' added is the same as the number of 'addrinfo'.
-    /// The AddrAggregatord is under the signer.
+    /// The number of 'addr' added should same as the number of 'addrinfo'.
+    /// The AddrAggregatord should under the signer.
     spec  batch_add_addr(
         acct: &signer,
         addrs: vector<String>,
@@ -46,8 +46,8 @@ spec my_addr::addr_aggregator {
         ensures len(addrs) == len(addr_infos);
     }
 
-    /// check addr is 0x begin.
-    /// The AddrAggregatord is under the signer.
+    /// The addr has 0x as it's prefix.
+    /// The AddrAggregatord should under the signer.
     spec update_eth_addr(acct: &signer, addr: String, signature: String) {
         include addr_info::CheckAddrPrefix;
         let addr_aggr = global<AddrAggregator>(signer::address_of(acct));
@@ -55,8 +55,8 @@ spec my_addr::addr_aggregator {
         include addr_eth::UpdateAddr{addr_info};
     }
 
-    /// The addr is 0x begin.
-    /// The AddrAggregatord is under the signer.
+    /// The addr has 0x as it's prefix.
+    /// The AddrAggregatord should under the signer.
     spec update_aptos_addr(acct: &signer, addr: String, signature: String) {
         include addr_info::CheckAddrPrefix;
         let addr_aggr = global<AddrAggregator>(signer::address_of(acct));
@@ -64,8 +64,9 @@ spec my_addr::addr_aggregator {
         include addr_aptos::UpdateAddr{addr_info};
     }
 
-    /// The addr is 0x begin.
+    /// The addr has 0x as it's prefix.
     /// The AddrAggregatord is under the signer.
+    /// The length of signature should not same as 0.
     spec update_addr_msg_with_chains_and_description(acct: &signer, addr: String, chains: vector<String>, description: String) {
         include addr_info::CheckAddrPrefix;
         let addr_aggr = global<AddrAggregator>(signer::address_of(acct));
@@ -73,8 +74,8 @@ spec my_addr::addr_aggregator {
         ensures len(addr_info.signature) != 0;
         }
 
-    /// The addr is 0x begin.
-    /// The AddrAggregatord is under the signer.
+    /// The addr has 0x as it's prefix.
+    /// The AddrAggregatord should under the signer.
     spec update_addr_for_non_verify(acct: &signer, addr: String, chains: vector<String>, description: String) {
         include addr_info::CheckAddrPrefix;
         let addr_aggr = global<AddrAggregator>(signer::address_of(acct));
@@ -82,8 +83,9 @@ spec my_addr::addr_aggregator {
         include addr_info::UpdateAddrForNonVerify{addr_info};
         }
 
-    /// The addr is 0x begin.
-    /// The AddrAggregatord is under the signer.
+    /// The addr has 0x as it's prefix.
+    /// The AddrAggregatord should under the signer.
+    /// The addr should not in the addr_infos_map after deleting.
     spec delete_addr(acct: &signer, addr: String) {
         include addr_info::CheckAddrPrefix;
         let addr_aggr = global<AddrAggregator>(signer::address_of(acct));

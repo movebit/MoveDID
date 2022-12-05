@@ -3,14 +3,14 @@ spec my_addr::addr_info {
         pragma verify = true;
     }
 
-    /// BlockResource is under the @aptos_framework.
-    /// CurrentTimeMicroseconds is under the @aptos_framework.
+    /// BlockResource should under the @aptos_framework.
+    /// CurrentTimeMicroseconds should under the @aptos_framework.
     spec init_addr_info(id: u64, addr_type: u64, addr: String, pubkey: String, chains: &vector<String>, description: String): AddrInfo {
         ensures exists<block::BlockResource>(@aptos_framework);
         ensures exists<timestamp::CurrentTimeMicroseconds>(@aptos_framework);
-    }
+        }
 
-    /// The addr is 0x prefix
+    /// The addr has 0x as it's prefix.
     spec check_addr_prefix(addr: String) {
         let l = len(addr.bytes);
         aborts_if string::spec_internal_sub_string(addr.bytes, 0, 2) != (b"0x");
@@ -23,15 +23,15 @@ spec my_addr::addr_info {
         ensures string::spec_internal_sub_string(addr.bytes, 0, 2) == (b"0x");
     }
 
-    /// The signature under the addr_info is not empty.
-    /// BlockResource is under the @aptos_framework.
+    /// The signature under the addr_info should not be empty.
+    /// BlockResource should under the @aptos_framework.
     spec update_addr_msg_with_chains_and_description(addr_info: &mut AddrInfo, chains: vector<String>, description: String) {
         ensures len(addr_info.signature) != 0;
         ensures exists<block::BlockResource>(@aptos_framework);
     }
 
-    /// The signature under the addr_info is empty.
-    /// BlockResource is under the @aptos_framework.
+    /// The signature under the addr_info should be empty.
+    /// BlockResource should under the @aptos_framework.
     spec update_addr_for_non_verify(addr_info: &mut AddrInfo, chains: vector<String>, description: String) {
         aborts_if len(addr_info.signature) != 0;
         aborts_if !exists<timestamp::CurrentTimeMicroseconds>(@aptos_framework);

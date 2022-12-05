@@ -3,10 +3,10 @@ spec my_addr::addr_eth {
         pragma verify = true;
     }
 
-    /// The msg is not etmpy.
-    /// The length of addr under the addr_info is same as APTOS_ADDR_LENGTH + 2.
-    /// The addr_type under the addr_info is ADDR_TYPE_APTOS.
-    /// The now - created_at <= 2h.
+    /// The msg should not be etmpy.
+    /// The length of addr under the addr_info should same as APTOS_ADDR_LENGTH + 2.
+    /// The addr_type under the addr_info should be ADDR_TYPE_APTOS.
+    /// The now - created_at should not exceed 2h.
     spec update_addr(addr_info: &mut AddrInfo, signature: &mut String) {
         include UpdateAddr;
         pragma aborts_if_is_partial;
